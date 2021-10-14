@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.13.0 - 2021-10-14
+
+ - Skipping linting/testing when publishing to npm via CI
+
+
 ## 4.12.0 - 2021-10-14
 
 - Add specific instructions for rebuilding for Electron, https://github.com/MadLittleMods/node-usb-detection/pull/133
