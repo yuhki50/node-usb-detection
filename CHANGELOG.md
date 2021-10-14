@@ -1,8 +1,18 @@
 # Changelog
 
-## 4.12.0 - *upcoming*
+## 4.12.0 - 2021-10-14
 
 - Add specific instructions for rebuilding for Electron, https://github.com/MadLittleMods/node-usb-detection/pull/133
+- Replace TravisCI and AppVeyor with GitHub Actions
+    - Thanks to [@mcous](https://github.com/mcous) for the [contribution](https://github.com/MadLittleMods/node-usb-detection/pull/152)
+    - Bumped Node.js in CI to 12, 14, and 16
+    - Bumped recommended Node.js version to 14
+    - Dropped Linux x86 from CI, since Node.js stopped officially publishing Linux x86 builds after v8
+- Update and simplify development section in README as follows,
+    - Thanks to [@mcous](https://github.com/mcous) for the [contribution](https://github.com/MadLittleMods/node-usb-detection/pull/152)
+    - Remove Python 2 requirement, because `node-gyp` now only supports Python 3 and Python 2 has been EOL'd
+    - Remove some outdated links and instructions in favor of linking to `node-gyp` documentation
+
 
 ## 4.11.0 - 2021-03-04
 
