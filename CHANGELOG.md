@@ -1,5 +1,12 @@
 # Changelog
 
+
+## 4.14.0 - *upcoming*
+
+ - Fill in `device.deviceAddress`(as `devnum`) and `device.locationId`(as `busnum`) on Linux which were previously always hard-coded as `0`
+  - Thanks to [@efuturetoday](https://github.com/efuturetoday) for the [contribution](https://github.com/MadLittleMods/node-usb-detection/pull/149)
+
+
 ## 4.13.0 - 2021-10-14
 
  - Skipping linting/testing when publishing to npm via CI
