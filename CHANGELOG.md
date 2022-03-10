@@ -1,5 +1,8 @@
 # Changelog
 
+## 4.14.1 - 2022-03-10
+
+- Prebuild binaries from new Node.js v16 LTS, https://github.com/MadLittleMods/node-usb-detection/commit/c246d9fa85adeda8846317fefb6c1e9a7c63995e
 
 ## 4.14.0 - 2022-03-10
 
