@@ -105,11 +105,11 @@ jobs:
       # Prebuilds should only be generated once per OS + arch
       # Running from Node LTS will generate prebuilds for all ABIs
       - name: 'Prebuild binaries for all ABIs'
-        if: ${{ matrix.node == '14' }}
+        if: ${{ matrix.node == '16' }}
         run: npm run prebuild
 
       - name: 'Upload prebuilt binaries'
-        if: ${{ matrix.node == '14' }}
+        if: ${{ matrix.node == '16' }}
         uses: actions/upload-artifact@v2
         with:
           name: prebuilds-${{ matrix.os.name }}-${{ matrix.arch }}
