@@ -4,22 +4,42 @@ on: [push, pull_request]
 
 jobs:
   build:
-    name: 'Build on Node v${{ matrix.node }} ${{ matrix.os }} ${{ matrix.arch }}'
-    runs-on: ${{ matrix.os }}-latest
+    name: 'Build on Node v${{ matrix.node }} ${{ matrix.os.name }} ${{ matrix.arch }}'
+    runs-on: ${{ matrix.os.name }}-${{ matrix.os.version }}
 
     strategy:
       matrix:
-        os: [Ubuntu, Windows, macOS]
+        os:
+          - name: Ubuntu
+            version: latest
+          - name: macOS
+            version: latest
+          - name: Windows
+            # Using the `windows-2019` runner instead of latest(`windows-2022`)
+            # because the build was last known working on that version of runner and
+            # `prebuild` fails to find the 2022 Visual Studio install because
+            # it's internally using an old version of `node-gyp`, see
+            # https://github.com/prebuild/prebuild/issues/286
+            #
+            # Also some more context around this problem in this internal issue,
+            # https://github.com/MadLittleMods/node-usb-detection/issues/164
+            version: 2019
         arch: [x64]
         node: ['12', '14', '16']
         include:
-          - os: Windows
+          - os:
+              name: Windows
+              version: 2019
             arch: x86
             node: '12'
-          - os: Windows
+          - os: 
+              name: Windows
+              version: 2019
             arch: x86
             node: '14'
-          - os: Windows
+          - os: 
+              name: Windows
+              version: 2019
             arch: x86
             node: '16'
 
@@ -33,14 +53,49 @@ jobs:
           node-version: ${{ matrix.node }}
           architecture: ${{ matrix.arch }}
 
+      # FIXME: Install `npm@^8` (latest v8) once
+      # https://github.com/actions/setup-node/issues/411#issuecomment-1025543081
+      # is fixed.
+      #
+      # Even though we install a new version of node-gyp locally in
+      # the project, the CI always seems to use the npm bundled version of
+      # node-gyp. Even following the instructions from the docs, I could get it working
+      # on all other platforms except for Windows and npm@6, see
+      # - https://github.com/nodejs/node-gyp/blob/245cd5bbe4441d4f05e88f2fa20a86425419b6af/docs/Updating-npm-bundled-node-gyp.md
+      # - https://github.com/nodejs/node-gyp/blob/245cd5bbe4441d4f05e88f2fa20a86425419b6af/docs/Force-npm-to-use-global-node-gyp.md
+      - name: 'Install npm@^8 to get a more up to date bundled node-gyp'
+        run: npm install --global npm@8.3.1
+
+      # Fix `Error: Could not find any Visual Studio installation to use`
+      # See https://github.com/nodejs/node-gyp/tree/245cd5bbe4441d4f05e88f2fa20a86425419b6af/docs#issues-finding-the-installed-visual-studio
+      #
+      # This is commented out because we're using `windows-2019` runners atm
+      # - name: 'Set msvs_version so node-gyp can find the Visual Studio install'
+      #   if: ${{ matrix.os.name == 'Windows' }}
+      #   run: npm config set msvs_version 2022
+
       - name: 'Install Linux dependencies'
-        if: ${{ matrix.os == 'Ubuntu' }}
+        if: ${{ matrix.os.name == 'Ubuntu' }}
         run: |
           sudo apt-get update
           sudo apt-get install libudev-dev
 
+      - name: 'Node.js version'
+        run: node --version
+
+      - name: 'npm version'
+        run: npm --version
+
+      - name: 'node-gyp version'
+        run: npm run node-gyp -- --version
+
       - name: 'Install dependencies and build from source'
         run: npm ci --build-from-source
+
+      # We run this after `npm ci` so that `nan` is installed probably
+      - name: 'node-gyp configuration (for debugging)'
+        if: ${{ always() }}
+        run: npm run node-gyp -- configure --verbose
 
       # TODO: Tests are disabled until we have tests which are
       # suitable for CI and don't require manual interaction.
@@ -57,7 +112,7 @@ jobs:
         if: ${{ matrix.node == '14' }}
         uses: actions/upload-artifact@v2
         with:
-          name: prebuilds-${{ matrix.os }}-${{ matrix.arch }}
+          name: prebuilds-${{ matrix.os.name }}-${{ matrix.arch }}
           path: prebuilds
 
   check:
