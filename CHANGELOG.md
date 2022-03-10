@@ -1,12 +1,17 @@
 # Changelog
 
 
-## 4.14.0 - *upcoming*
+## 4.14.0 - 2022-03-10
 
 - Fill in `device.deviceAddress`(as `devnum`) and `device.locationId`(as `busnum`) on Linux which were previously always hard-coded as `0`
   - Thanks to [@efuturetoday](https://github.com/efuturetoday) for the [contribution](https://github.com/MadLittleMods/node-usb-detection/pull/149)
 - Fix segmentation fault (segfault) crash after `stopMonitoring` on Linux
   - Thanks to [@umbernhard](https://github.com/umbernhard), [@antelle](https://github.com/antelle) and [@Julusian](https://github.com/Julusian) for the [contribution](https://github.com/MadLittleMods/node-usb-detection/pull/162)
+
+Developer facing:
+
+ - Fix GitHub Actions CI failing on Windows runners (`windows-2022`) (prebuild failing to build binaries), https://github.com/MadLittleMods/node-usb-detection/pull/165
+ - Explain why test can fail when not enough devices from different vendors, https://github.com/MadLittleMods/node-usb-detection/pull/166
 
 
 ## 4.13.0 - 2021-10-14
