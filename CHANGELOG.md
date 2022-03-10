@@ -2,7 +2,10 @@
 
 ## 4.14.1 - 2022-03-10
 
-- Prebuild binaries from new Node.js v16 LTS, https://github.com/MadLittleMods/node-usb-detection/commit/c246d9fa85adeda8846317fefb6c1e9a7c63995e
+- Attempt to get more build more prebuild binaries. Still missing a lot!
+   - Prebuild binaries from new Node.js v16 LTS but this didn't help, https://github.com/MadLittleMods/node-usb-detection/commit/c246d9fa85adeda8846317fefb6c1e9a7c63995e
+   - The problem stems from a fix to skip Node.js v17.0.0 which fails to build, https://github.com/MadLittleMods/node-usb-detection/pull/165#discussion_r823362667
+
 
 ## 4.14.0 - 2022-03-10
 
