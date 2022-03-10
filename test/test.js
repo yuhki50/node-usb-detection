@@ -78,6 +78,14 @@ describe('usb-detection', function() {
 
 			it('should return a promise when vid is given', async function(done) {
 				const devices = await usbDetect.find();
+
+				const vendorIdMap = {};
+				devices.forEach((device => {
+					vendorIdMap[device.vendorId] = device.vendorId;
+				}));
+				// We assume you have many USB devices connected from different vendors (at least 2)
+				expect(Object.keys(vendorIdMap).length).to.be.greaterThan(1, 'Unable to get correct result from test because USB devices connected to host all have the same vendorId (need at least 2 devices from different vendors).');
+
 				usbDetect.find(devices[0].vendorId)
 					.then(function(devicesFromTestedFunction) {
 						testArrayOfDevicesShape(devicesFromTestedFunction);
